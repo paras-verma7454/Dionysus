@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+    previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+    extensions = [vector]
+}
+
+model User{
+    id         String   @id @default(cuid())
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+
+    imageUrl   String?
+    firstName  String?
+    lastName   String?
+    EmailAddress      String   @unique
+    userToProjects UserToProject[]
+    credits    Int @default(150)
+    QuestionsAsked Question[]
+
+}
+
+model Project{
+    id         String   @id @default(cuid())
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+
+    name String
+    repoUrl String
+    gitHubToken String?
+    deletedAt DateTime?
+    userToProjects UserToProject[]
+
+    Commit Commit[]
+    sourceCodeEmbedding SourceCodeEmbedding[]
+    SavedQuestion Question[]
+}
+
+model UserToProject{
+    id         String   @id @default(cuid())
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+
+    userId String
+    projectId String
+    user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+    @@unique([userId, projectId])
+}
+
+model Commit{
+    id         String   @id @default(cuid())
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+
+    commitMessage String
+    commitHash String
+    commitAuthorName String
+    commitAuthorAvatar String
+    commitDate DateTime
+    summary String
+
+    projectId  String
+    project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Question{
+    id         String   @id @default(cuid())
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+
+
+    question String
+    answer String
+
+    filesRefrences Json?
+
+    userId String
+    user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    projectId String
+    project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model SourceCodeEmbedding{
+    id         String   @id @default(cuid())
+
+    summaryEmbedding Unsupported("Vector(768)")?
+    sourceCode String
+    fileName String
+    summary String
+    projectId String
+    project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
