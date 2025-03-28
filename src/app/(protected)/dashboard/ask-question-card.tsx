@@ -14,6 +14,7 @@ import { useTheme } from 'next-themes';
 import CodeRefrence from './code-refrence'
 import { api } from '~/trpc/react'
 import { toast } from 'sonner'
+import useRefetch from '~/hooks/use-refetch'
 
 
 
@@ -45,11 +46,8 @@ const AskQuestionCard = () => {
     }
     setLoading(false)
   }
-  const source = `
-## MarkdownPreview
+  const refetch = useRefetch();
 
-> todo: React component preview markdown text.
-`;
   return (
     <>
     <Dialog open={open} onOpenChange={setOpen}>
@@ -73,6 +71,7 @@ const AskQuestionCard = () => {
             },{
               onSuccess:()=>{
                 toast.success('Answer saved successfully')
+                refetch();
               },
               onError: (error) => {
                 toast.error("Failed to save answer");
@@ -86,8 +85,8 @@ const AskQuestionCard = () => {
 
         </DialogHeader>
       
-      <MarkdownPreview source={answer} className='max-w-[70vw] h-full max-h-[35vh] overflow-scroll' 
-      style={{ padding: '1rem' }} 
+      <MarkdownPreview source={answer} className='max-w-[70vw] h-full max-h-[30vh] overflow-scroll' 
+      style={{ padding: '1rem'}} 
       wrapperElement={{
         "data-color-mode": theme === 'dark' ? 'dark' : 'light',
       }}/>  

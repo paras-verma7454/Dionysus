@@ -21,10 +21,10 @@ const CodeRefrence = ({ filesRefrences }: Props) => {
   return (
     <div className='max-w-[70vw]'>
        <Tabs value={tab} onValueChange={setTab}>
-        <div className='overflow-scroll flex gap-1 bg-gray-200 -mt-3 p-1 rounded-md'>
+        <div className='overflow-scroll flex gap-1 bg-gray-200  p-1 rounded-md'>
             {filesRefrences.map((file )=>(
                 <button onClick={()=>setTab(file.fileName)} key={file.fileName} className={cn(
-                    'p-2 -mb-1 text-sm font-medium  rounded-md transition-colors whitespace-nowrap text-muted-foreground hover:bg-muted',
+                    'p-1 mb-1 text-sm font-medium  rounded-md transition-colors whitespace-nowrap text-muted-foreground hover:bg-muted',
                     {
                         'bg-primary text-primary-foreground':  tab === file.fileName,
                     }
@@ -34,7 +34,7 @@ const CodeRefrence = ({ filesRefrences }: Props) => {
             ))}
         </div>
         {filesRefrences.map((file)=>(
-            <TabsContent key={file.fileName} value={file.fileName} className='max-h-[30vh] overflow-scroll max-w-7xl rounded-md'>
+            <TabsContent key={file.fileName} value={file.fileName} className='max-h-[40vh] overflow-scroll max-w-7xl rounded-md'>
                 <SyntaxHighlighter language='typescript' style={lucario}>
                     {file.sourceCode}
                 </SyntaxHighlighter>
