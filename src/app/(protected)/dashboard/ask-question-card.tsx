@@ -85,14 +85,14 @@ const AskQuestionCard = () => {
 
         </DialogHeader>
       
-      <MarkdownPreview source={answer} className='max-w-[70vw] h-full max-h-[30vh] overflow-scroll' 
-      style={{ padding: '1rem'}} 
-      wrapperElement={{
-        "data-color-mode": theme === 'dark' ? 'dark' : 'light',
-      }}/>  
-      <div className="h-1"></div>
-      <CodeRefrence filesRefrences={filesReferences}/>
-        <button type='button' onClick={() => { setOpen(false) }} className='border rounded-md py-2 bg-primary/40'>
+        <MarkdownPreview source={answer} className='max-w-[70vw] h-full max-h-[30vh] overflow-scroll -mt-2' 
+          style={{ padding: '1rem', background: 'transparent' }}
+          wrapperElement={{
+            "data-color-mode": theme === 'dark' ? 'dark' : 'light',
+          }}/>  
+        {/* <div className="h-1"></div> */}
+        <CodeRefrence filesRefrences={filesReferences} />
+        <button type='button' onClick={() => { setOpen(false) }} className='border rounded-md py-2 -mt-3 bg-primary/40'>
           Close
         </button>
       </DialogContent>
@@ -104,7 +104,7 @@ const AskQuestionCard = () => {
         </CardHeader>
         <CardContent>
           <form onSubmit={onSubmit} onKeyDown={(e) => { if (e.key === 'Enter') onSubmit(e); }}>
-            <Textarea className='h-24' placeholder='Which file should I edit to change the home page?' value={question} onChange={(e) => setQuestion(e.target.value)}/>
+            <Textarea className='h-28' placeholder='Which file should I edit to change the home page?' value={question} onChange={(e) => setQuestion(e.target.value)}/>
             <div className="h-4"></div>
             <Button type='submit' disabled={loading}>{loading ? 'Asking Dionysus...' : 'Ask Dionysus!'}</Button>
           </form>

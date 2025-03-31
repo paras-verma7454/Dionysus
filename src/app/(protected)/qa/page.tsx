@@ -28,11 +28,11 @@ const QAPage = () => {
                     <div className='flex items-center gap-4  rounded-lg p-4 shadow border'>
                         <img className='rounded-full' height={30} width={30} src={question.user.imageUrl ?? ""}/>
                         <div className='text-left flex flex-col'>
-                          <div className='flex items-center gap-2 '>
-                              <p className='text-gray-700 line-clamp-1 text-lg font-medium'>
+                          <div className='flex items-center justify-between '>
+                              <p className=' line-clamp-1 text-lg font-medium'>
                                 {question.question}
                               </p>
-                              <span className='text-sm text-gray-400 whitespace-nowrap'>
+                              <span className='text-sm text-gray-400 whitespace-nowrap '>
                                   {question.createdAt.toLocaleDateString()}
                               </span>
                           </div>

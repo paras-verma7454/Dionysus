@@ -5,6 +5,7 @@ import React from 'react'
 import useProject from '~/hooks/use-project';
 import CommitLog from './commit-log';
 import AskQuestionCard from './ask-question-card';
+import MeetingCard from './meeting-card';
 
 const page = () => {
   const { project } = useProject();
@@ -46,7 +47,7 @@ const page = () => {
 
         <div className='grid grid-cols-1 gap-4 sm:grid-cols-5'>
            <AskQuestionCard />
-           Meetingcard
+           <MeetingCard/>
         </div>
       </div>
 
