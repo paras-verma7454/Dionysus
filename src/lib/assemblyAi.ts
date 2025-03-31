@@ -5,11 +5,11 @@
 import { AssemblyAI } from 'assemblyai';
 
 const client = new AssemblyAI({
-  apiKey: 'd346c2df5e4f4d81a3ce52d91c59bda1',
+  apiKey: process.env.ASSEMBLY_API_KEY || '',
 });
 
-const FILE_URL =
-  'https://assembly.ai/sports_injuries.mp3';
+// const FILE_URL =
+//   'https://assembly.ai/sports_injuries.mp3';
 
 function msToTime(ms:number){
     const seconds= ms/1000
