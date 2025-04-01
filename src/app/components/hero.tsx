@@ -38,7 +38,8 @@ export function Hero() {
                     <h3 className="text-lg font-semibold text-white">Repository Analysis</h3>
                   </div>
                   <p className="text-white/90">
-                    Input a GitHub repository URL and get AI-powered insights about the codebase.
+                  Input a GitHub repository URL to get AI-powered summaries of recent commits and insights about the
+                  codebase.
                   </p>
                   <div className="flex items-center gap-2">
                     <Code className="h-6 w-6 text-white" />

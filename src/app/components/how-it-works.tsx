@@ -30,8 +30,8 @@ export function HowItWorks() {
             </CardHeader>
             <CardContent>
               <p>
-                Enter the URL of your GitHub repository to connect it to Dionysus. Our AI will analyze the codebase and
-                provide insights.
+              Enter the URL of your GitHub repository to connect it to Dionysus. Our AI will summarize recent commits
+              and analyze the codebase for insights.
               </p>
             </CardContent>
             <CardFooter>

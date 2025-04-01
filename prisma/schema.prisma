@@ -24,6 +24,7 @@ model User{
     userToProjects UserToProject[]
     credits    Int @default(150)
     QuestionsAsked Question[]
+    stripeTransactions  StripeTransaction[]
 
 }
 
@@ -107,6 +108,18 @@ model Meeting{
 enum MeetingStatus{
     PROCESSING
     COMPLETED
+    
+}
+
+model StripeTransaction{
+    id    String     @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    userId   String
+    user       User     @relation(fields: [userId], references: [id], onDelete: Cascade) 
+
+    credits Int
     
 }
 

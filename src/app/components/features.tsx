@@ -21,7 +21,7 @@ export function Features() {
             </div>
             <h3 className="text-xl font-bold">GitHub Integration</h3>
             <p className="text-muted-foreground text-center">
-              Connect to any GitHub repository and get AI-powered insights about the codebase.
+            Connect to any GitHub repository and get AI-powered summaries of recent commits and codebase insights.
             </p>
           </div>
           <div className="flex flex-col items-center space-y-4 rounded-lg border p-6 shadow-sm">
