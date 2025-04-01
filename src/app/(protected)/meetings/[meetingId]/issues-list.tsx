@@ -46,7 +46,7 @@ const IssuesList = ({meetingId}:Props) => {
                 <div className='hidden lg:flex items-center justify-center'>
                     <Button variant='outline'>
                         <Link href={meeting.meetingUrl ?? ""} target='_blank'>
-                        Listen to Meeting
+                        Listen Meeting
                         </Link>
                     </Button>
                 </div>

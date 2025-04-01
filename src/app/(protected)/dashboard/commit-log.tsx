@@ -79,9 +79,13 @@ const CommitLog = () => {
                                         </p>
                                     </div>
                                     <span className='font-semibold text-foreground'>{commit.commitMessage}</span>
-                                    <pre className='mt-2 whitespace-pre-wrap text-muted-foreground text-sm leading-6'>
-                                        {commit.summary}
-                                    </pre>
+                                    <div className='mt-2 whitespace-pre-wrap text-muted-foreground text-sm leading-6'
+                                        dangerouslySetInnerHTML={{
+                                            __html: commit.summary
+                                                .replace(/(\*{2})(.*?)\1/g, '<b>$2</b>')
+                                                .replace(/(['"`])(.*?)\1/g, '<b>$2</b>'),
+                                        }}
+                                    />
                                 </div>
                             </>
                         </li>

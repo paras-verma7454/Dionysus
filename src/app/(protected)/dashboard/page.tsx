@@ -6,7 +6,9 @@ import useProject from '~/hooks/use-project';
 import AskQuestionCard from './ask-question-card';
 import MeetingCard from './meeting-card';
 import CommitLog from './commit-log';
-import { redirect } from 'next/navigation';
+import DeleteButton from './delete-button';
+import InviteButton from './invite-button';
+import TeamMembers from './team-members';
 
 
 
@@ -16,8 +18,8 @@ const page = () => {
   // if(!project) return redirect('/create');
   return (
     <div>
-      <h1 className='text-2xl font-bold'>{project?.name}</h1>
-      <div className='h-2'></div>
+      {/* <h1 className='text-2xl font-bold'>{project?.name}</h1>
+      <div className='h-2'></div> */}
 
 
       <div className='flex items-center justify-between flex-wrap gap-y-4'>
@@ -40,9 +42,9 @@ const page = () => {
       <div className='h-4'></div>
 
       <div className='flex items-center gap-4 '>
-            TeamMembers
-            Invite Button
-            Archive Button
+            <TeamMembers/>
+            <InviteButton/>
+            <DeleteButton/>
       </div>
 
       </div>
