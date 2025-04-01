@@ -50,7 +50,7 @@ import { Document } from "@langchain/core/documents";
       const code = doc.pageContent.slice(0, 10000);
       console.log("summarise code ----------------------")
       // console.log("source", doc.metadata);
-      // console.log("source code:", doc.metadata.source);
+      console.log("source code:", code);
       try {
         const response = await model.generateContent([
           `You are an intelligent senior software engineer who specializes in onboarding junior software engineers onto projects. 

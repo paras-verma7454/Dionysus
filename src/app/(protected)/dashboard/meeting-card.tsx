@@ -1,6 +1,5 @@
 "use client"
 import React, { useState } from 'react'
-import {CircularProgressbar, buildStyles} from 'react-circular-progressbar'
 import { Card } from '~/components/ui/card';
 import { useDropzone } from 'react-dropzone';
 import { uploadFile } from '~/lib/supabase';
@@ -22,7 +21,7 @@ const MeetingCard = () => {
 
             const {meetingUrl, meetingId, projectId} = data;
             console.log("Processing meeting", data)
-            const response =  await axios.post('/api//process-meeting',{
+            const response =  await axios.post('/api/process-meeting',{
                 meetingUrl,
                 meetingId,
                 projectId
@@ -38,18 +37,24 @@ const MeetingCard = () => {
             'audio/*':[],
         },
         multiple: false,
-        maxSize: 50 * 1024 * 1024,  // Limit to 50 MB
+        // maxSize: 50 * 1024 * 1024,  // Limit to 50 MB
         onDrop: async(acceptedFiles)=> {
             setIsUploading(true)
             console.log(acceptedFiles) 
             const file = acceptedFiles[0];
-            // console.log("File drop:",file)
+            console.log("File drop:",file)
 
             if (!file) {
-                toast.error("Invalid file")
+                toast.error("Audio files only")
                 setIsUploading(false)
                 return
             };
+
+            if(file?.size >= 50 * 1024 * 1024){
+                toast.error("File size Limited to 50 MB")
+                setIsUploading(false)
+                return
+            }
                 const {  url } = await uploadFile(file as File)
                 uploadMeeting.mutate({
                     projectId: project.projectId,
@@ -82,12 +87,13 @@ const MeetingCard = () => {
                     <h3 className='mt-2 text-sm font-semibold '>
                         Create a new meeting
                     </h3>
-                    <p className='mt-1 text-center text-sm text-gray-500'>
-                        Analyse your meeting with Dionysus.<span className='text-gray-400 text-xs'>{" "}(Limit 50 MB)</span>
+                    <p className='mt-5 text-center text-sm text-gray-500'>
+                        Analyse your meeting with Dionysus.
+                        {/* <span className='text-gray-400 text-xs'>{" "}(Limit 50 MB)</span> */}
                         <br/>
                         Powered by AI
                     </p>
-                    <div className='mt-6'>
+                    <div className='mt-4'>
                         <Button disabled={isUploading}>
                             <Upload className='h-5 w-5 mr-2' aria-hidden='true'/>
                             Upload Meeting

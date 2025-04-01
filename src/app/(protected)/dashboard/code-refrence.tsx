@@ -23,14 +23,14 @@ const CodeRefrence = ({ filesRefrences }: Props) => {
        <Tabs value={tab} onValueChange={setTab}>
         <div className='overflow-scroll flex gap-1 bg-gray-200  p-1 rounded-md'>
             {filesRefrences.map((file )=>(
-                <button onClick={()=>setTab(file.fileName)} key={file.fileName} className={cn(
-                    'p-1 mb-1 text-sm font-medium  rounded-md transition-colors whitespace-nowrap text-muted-foreground hover:bg-muted',
+                <Button variant={'outline'} onClick={()=>setTab(file.fileName)} key={file.fileName} className={cn(
+                    'p-1 text-sm font-medium  rounded-md transition-colors whitespace-nowrap text-muted-foreground bg-transparent hover:bg-muted',
                     {
                         'bg-primary text-primary-foreground':  tab === file.fileName,
                     }
                 )}>
                     {file.fileName}
-                </button>
+                </Button>
             ))}
         </div>
         {filesRefrences.map((file)=>(

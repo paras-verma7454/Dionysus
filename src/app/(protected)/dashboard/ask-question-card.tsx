@@ -6,15 +6,14 @@ import { Button } from '~/components/ui/button'
 import { Textarea } from '~/components/ui/textarea'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '~/components/ui/dialog'
 import Image from 'next/image'
-import { askQuestion } from './action'
 import { readStreamableValue } from 'ai/rsc'
-import MarkdownEditor from '@uiw/react-markdown-editor';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { useTheme } from 'next-themes';
-import CodeRefrence from './code-refrence'
 import { api } from '~/trpc/react'
 import { toast } from 'sonner'
 import useRefetch from '~/hooks/use-refetch'
+import { askQuestion } from './action'
+import CodeRefrence from './code-refrence'
 
 
 
@@ -89,7 +88,7 @@ const AskQuestionCard = () => {
           style={{ padding: '1rem', background: 'transparent' }}
           wrapperElement={{
             "data-color-mode": theme === 'dark' ? 'dark' : 'light',
-          }}/>  
+          }}/>    
         {/* <div className="h-1"></div> */}
         <CodeRefrence filesRefrences={filesReferences} />
         <button type='button' onClick={() => { setOpen(false) }} className='border rounded-md py-2 -mt-3 bg-primary/40'>

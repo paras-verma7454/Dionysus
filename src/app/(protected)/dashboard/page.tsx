@@ -3,12 +3,17 @@ import { ExternalLink, Github } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react'
 import useProject from '~/hooks/use-project';
-import CommitLog from './commit-log';
 import AskQuestionCard from './ask-question-card';
 import MeetingCard from './meeting-card';
+import CommitLog from './commit-log';
+import { redirect } from 'next/navigation';
+
+
 
 const page = () => {
   const { project } = useProject();
+  // console.log("project",project)
+  // if(!project) return redirect('/create');
   return (
     <div>
       <h1 className='text-2xl font-bold'>{project?.name}</h1>
@@ -53,7 +58,7 @@ const page = () => {
 
       <div className='mt-8'></div>
 
-      <CommitLog />
+      <CommitLog/>
       
     </div>
   )

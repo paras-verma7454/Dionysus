@@ -66,7 +66,7 @@ export const pollCommits = async (prjectId: string) => {
             }
         }),
     });
-    console.log(`commits created: ${commits}`);
+    console.log(`commits created: ${commits.count}`);
     return commits;
 
 }; 

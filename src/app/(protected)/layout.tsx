@@ -9,7 +9,7 @@ type Props = {
 }
 const userButtonAppearance = {
     elements: {
-      userButtonAvatarBox: "w-8 h-8", // Custom width and height
+      userButtonAvatarBox: "w-9 h-9", // Custom width and height
       userButtonPopoverCard: "w-auto", // Custom background for the popover card
     //   userButtonPopoverActionButton: "text-blue-400", // Custom text color for action buttons
     },
@@ -19,7 +19,7 @@ const SideBarLayout = ({children}:Props) => {
     <SidebarProvider>
         {/* <AppSidebar /> */}
         <AppSidebar/>
-        <main className='w-full m-2 '>
+        <main className='w-full m-2  '>
             <div className='flex items-center gap-2 border-sidebar-border bg-sidebar border shadow rounded-md p-2 px-4'>
                 <SidebarTrigger />
                 {/* <SearchBar/> */}

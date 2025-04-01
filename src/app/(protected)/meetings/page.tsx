@@ -52,8 +52,8 @@ const MeetingPage = () => {
                     </div>
                     <div className='flex items-center felx-none gap-x-4'>
                                 <Link href={`/meetings/${meeting.id}`}  className='text-sm font-semibold'>
-                                    <Button variant={'outline'} size={'sm'}>
-                                        View Meeting
+                                    <Button variant={'outline'} >
+                                        View
                                     </Button>
                                 </Link>
                                 <Button size={'sm'} disabled={deleteMeeting.isPending} variant={'destructive'} onClick={()=>{ deleteMeeting.mutate({meetingId:meeting.id},{

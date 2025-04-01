@@ -41,6 +41,7 @@ export const indexGithubRepo = async (projectId: string, repoUrl: string, github
 }
 
 export const generateEmbeddings = async (docs: Document[]) => {
+    console.log("generating embeddings-------------------")
     return await Promise.all(docs.map(async (doc) => {
         const summary = await summariseCode(doc)
         const embedding = await generateEmbedding(summary)

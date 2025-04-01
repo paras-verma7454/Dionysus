@@ -50,7 +50,7 @@ const Create = () => {
             </div>
             <div className=''></div>
             <div>
-                <form onSubmit={handleSubmit(onSubmit)} onKeyDown={(e) => { if (e.key === 'Enter') handleSubmit(onSubmit)(); }}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <Input {...register('projectName', {required: true})} placeholder='Project Name' required />
                     <div className='h-2'></div>
                     <Input {...register('repoUrl', {required: true})} type='url' placeholder='GitHub Repository URL' required />
