@@ -1,11 +1,10 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-export const supabase = createClient(supabaseUrl as string, supabaseAnonKey as string);
-
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
+// const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
+const serviceRoleKey= process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY as string;
+export const supabase = createClient(supabaseUrl , serviceRoleKey);
 export const uploadFile = async (file: File) => {
-
 
     // Sanitize the file name by replacing unsafe characters
     let safeFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
@@ -16,6 +15,7 @@ export const uploadFile = async (file: File) => {
     const { data: existingFiles } = await supabase.storage.from('audio-files').list('uploads/');
 
     const existingFileNames = existingFiles?.map(file => file.name);
+    
 
     // Append numbers until a unique filename is found
     while (existingFileNames?.includes(safeFileName)) {
