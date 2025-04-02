@@ -104,6 +104,9 @@ async function filterUnprocessedCommits(prjectId: string, commitHashes: Response
         where: {
             projectId: prjectId,
         },
+        select: {
+            commitHash: true,
+        },
     });
     const unprocessedCommits = commitHashes.filter((commit) => !processedCommits.some((c) => c.commitHash === commit.commitHash));
     return unprocessedCommits;
