@@ -1,29 +1,14 @@
 # Dionysus
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Dionysus is an AI-powered development assistant that helps you understand codebases, analyze repositories, and transcribe meetings.
 
-## What's next? How do I make an app with this?
+![image](https://github.com/user-attachments/assets/edc5e414-ff90-4cb1-8cd2-fb930dd32889)
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## How it works
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
-
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
-
-## Learn More
-
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
-
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
-
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+- **Connect Repository**
+    - Enter the URL of your GitHub repository to connect it to Dionysus. Our AI will summarize recent commits and analyze the codebase for insights.
+- **Ask Questions**
+    -  Ask questions about your code in natural language. Our AI will provide relevant and accurate answers based on your repository.
+- **Upload Audio**
+    -  Upload meeting recordings to get AI-powered transcriptions and summaries of key points discussed in your meetings.
