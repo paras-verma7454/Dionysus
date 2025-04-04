@@ -9,6 +9,7 @@ import { api } from '~/trpc/react'
 
 const BillingPage = () => {
     const {data:user} = api.project.getMyCredits.useQuery()
+    const { data: purchaseHistory } = api.project.getPurchaseHistory.useQuery()
     const [creditsToBuy,setCreditsToBuy] = useState<number[]>([100]);
     const creditsToBuyAmout = creditsToBuy[0]!
     const price = (creditsToBuyAmout/50).toFixed(2)
@@ -42,6 +43,34 @@ const BillingPage = () => {
         }}>
             Buy {creditsToBuyAmout} Credits for ${price}
         </Button>
+        <div className="h-4"></div>
+         {/* Purchase History Section */}
+        <div>
+
+            <h2 className='text-lg font-semibold'>Purchase History</h2>
+                {purchaseHistory ? (
+                    purchaseHistory.length > 0 ? (
+                        <div className="bg-primary/10 px-4 py-2 rounded-md border mt-2 border-primary/30">
+                            <ul>
+                                {purchaseHistory.map((transaction) => (
+                                    <li key={transaction.id} className='flex justify-between items-center py-2 border-b border-primary/30 last:border-b-0'>
+                                        <span className='text-muted-foreground'>{transaction.createdAt.toLocaleString(undefined, { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                                        <span className='text-green-500'>+{transaction.credits}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ) : (
+                        <div className="bg-primary/10 px-4 py-2 rounded-md border mt-2 border-primary/30">
+                            <p>No transactions found.</p>
+                        </div>
+                    )
+                ) : (
+                    <div className="bg-primary/10 px-4 py-2 rounded-md border mt-2 border-primary/30">
+                        <p>Loading...</p>
+                    </div>
+                )}
+        </div>
     </div>
   )
 }
