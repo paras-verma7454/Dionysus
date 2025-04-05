@@ -64,7 +64,7 @@ model Commit{
     updatedAt  DateTime @updatedAt
 
     commitMessage String
-    commitHash String
+    commitHash String   @unique
     commitAuthorName String
     commitAuthorAvatar String
     commitDate DateTime
