@@ -184,24 +184,47 @@ export const projectRouter = createTRPCRouter({
         });
     }),
 
-    checkCredits: protectedProcedure.input(z.object({
-        githubUrl: z.string(),
-        githubToken: z.string().optional(),
-    })).mutation(async ({ctx, input}) => {
-        const fileCount = await checkCredits(input.githubUrl, input.githubToken);
-        const userCredits = await ctx.db.user.findUnique({
-            where: {
-                id: ctx.user.userId!,
-            },
-            select:{
-                credits: true
-            }
-        })
-        return {
-            fileCount,
-            credits: userCredits?.credits || 0
-        }
-    }),
+    checkCredits: protectedProcedure
+  .input(
+    z.object({
+      githubUrl: z.string(),
+      githubToken: z.string().optional(), // user token is optional
+    })
+  )
+  .mutation(async ({ ctx, input }) => {
+    // Use user-provided token first, fallback to server token
+    const token = input.githubToken || process.env.GITHUB_ACCESS_TOKEN ;
+    if (!token) {
+      throw new Error("No GitHub token provided or configured.");
+    }
+
+    let fileCount = 0;
+    try {
+      fileCount = await checkCredits(input.githubUrl, token);
+    } catch (err: any) {
+      console.error("Error fetching repo files:", err?.response?.data || err);
+
+      // Handle GitHub API errors gracefully
+      if (err?.response?.status === 401) {
+        throw new Error("Invalid GitHub token (401 Bad credentials).");
+      }
+      if (err?.response?.status === 403) {
+        throw new Error("GitHub API rate limit exceeded. Please try again later.");
+      }
+      throw new Error("Unable to fetch repository files.");
+    }
+
+    const userCredits = await ctx.db.user.findUnique({
+      where: { id: ctx.user.userId! },
+      select: { credits: true },
+    });
+
+    return {
+      fileCount,
+      credits: userCredits?.credits || 0,
+    };
+  }),
+
 
     getPurchaseHistory: protectedProcedure.query(async ({ ctx }) => {
         return await ctx.db.stripeTransaction.findMany({

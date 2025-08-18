@@ -37,7 +37,7 @@ const Create = () => {
             })
 
         }else{
-            checkCredits.mutate({githubUrl: repoUrl, githubToken: gitHubToken});
+            checkCredits.mutate({githubUrl: repoUrl, githubToken: gitHubToken as string});
         }
         
         // window.alert(JSON.stringify(data,null,2))
@@ -80,7 +80,7 @@ const Create = () => {
                         </>
                     )}
                     <div className='h-2'></div>
-                    <Input {...register('gitHubToken')} placeholder='GitHub Token (Optional)' />
+                    <Input {...register('gitHubToken')} placeholder='GitHub access token' />
                     <Button type='submit' className='mt-4' disabled={createProject.isPending || !!checkCredits.isPending || !hasEnoughCredits}>
                         {!!checkCredits.data ? "Create Project" : "Check Credits"}
                     </Button>
