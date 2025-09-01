@@ -8,7 +8,7 @@ import { db } from "~/server/db";
  */
 export const loadGithubRepo = async (repoUrl: string, githubToken?: string) => {
   const loader = new GithubRepoLoader(repoUrl, {
-    accessToken: githubToken || process.env.GITHUB_ACCESS_TOKEN,
+    accessToken: githubToken || process.env.GITHUB_ACCESS_TOKEN as string,
     branch: "main",
     ignoreFiles: [
       "package-lock.json",
