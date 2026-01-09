@@ -16,17 +16,18 @@ type Props ={
 }
 const CodeRefrence = ({ filesRefrences }: Props) => {
     const [tab,setTab] = useState(filesRefrences[0]?.fileName);
+
     if (filesRefrences.length === 0) return null
 
   return (
     <div className='max-w-[70vw]'>
-       <Tabs value={tab} onValueChange={setTab}>
+       <Tabs value={tab ?? filesRefrences[0]?.fileName} onValueChange={setTab}>
         <div className='overflow-scroll flex gap-1 bg-gray-200  p-1 rounded-md'>
             {filesRefrences.map((file )=>(
                 <Button variant={'outline'} onClick={()=>setTab(file.fileName)} key={file.fileName} className={cn(
                     'p-1 text-sm font-medium  rounded-md transition-colors whitespace-nowrap text-muted-foreground bg-transparent hover:bg-muted',
                     {
-                        'bg-primary text-primary-foreground':  tab === file.fileName,
+                        'bg-primary text-primary-foreground':  (tab ?? filesRefrences[0]?.fileName) === file.fileName,
                     }
                 )}>
                     {file.fileName}

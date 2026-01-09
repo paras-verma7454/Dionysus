@@ -44,9 +44,12 @@ export const projectRouter = createTRPCRouter({
                 }
             },
         });
-        await pollCommits(project.id);
-        await indexGithubRepo(project.id, repoUrl, gitHubToken);
+        
         await ctx.db.user.update({where:{id: ctx.user.userId!}, data:{credits: { decrement: fileCount}}});
+
+        pollCommits(project.id).catch(console.error);
+        indexGithubRepo(project.id, repoUrl, gitHubToken).catch(console.error);
+        
         return project;
     }),
     getProjects: protectedProcedure.query(async ({ctx}) => {

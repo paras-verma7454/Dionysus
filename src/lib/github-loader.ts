@@ -2,14 +2,16 @@ import { GithubRepoLoader } from "@langchain/community/document_loaders/web/gith
 import { Document } from "@langchain/core/documents";
 import { generateEmbedding, summariseCode } from "./gemini";
 import { db } from "~/server/db";
+import { getDefaultBranch } from "./github";
 
 /**
  * Load all files from a GitHub repo using LangChain’s GithubRepoLoader.
  */
 export const loadGithubRepo = async (repoUrl: string, githubToken?: string) => {
+  const branch = await getDefaultBranch(repoUrl, githubToken);
   const loader = new GithubRepoLoader(repoUrl, {
     accessToken: githubToken || process.env.GITHUB_ACCESS_TOKEN || "",
-    branch: "main",
+    branch,
     ignoreFiles: [
       "package-lock.json",
       "yarn.lock",

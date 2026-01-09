@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { Button } from '~/components/ui/button';
@@ -7,7 +7,8 @@ import { Input } from '~/components/ui/input';
 import { api } from '~/trpc/react';
 import useRefetch from '~/hooks/use-refetch';
 import { Info } from 'lucide-react';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import useProject from '~/hooks/use-project';
 
 type FormInput= {
     repoUrl: string;
@@ -17,18 +18,27 @@ type FormInput= {
 
 const Create = () => {
 
-    const {register, handleSubmit, reset}= useForm<FormInput>()
+    const {register, handleSubmit, reset, watch}= useForm<FormInput>()
     const createProject= api.project.createProject.useMutation();
     const checkCredits = api.project.checkCredits.useMutation();
     const refetch = useRefetch();
+    const router = useRouter();
+    const { setProjectId } = useProject();
+
+    const repoUrl = watch('repoUrl');
+    useEffect(() => {
+        checkCredits.reset();
+    }, [repoUrl]);
 
     function onSubmit(data: FormInput){
         const {projectName, repoUrl, gitHubToken}= data;
         if (!!checkCredits.data){
             createProject.mutate({name: projectName, repoUrl, gitHubToken},{
-                onSuccess: () => {
+                onSuccess: (project) => {
                     toast.success("Project created successfully");
-                    redirect('/dashboard')
+                    setProjectId(project.id);
+                    refetch();
+                    router.push('/dashboard')
                 },
                 onError: (error) => {
                     console.log("error")
@@ -37,14 +47,18 @@ const Create = () => {
             })
 
         }else{
-            checkCredits.mutate({githubUrl: repoUrl, githubToken: gitHubToken as string});
+            checkCredits.mutate({githubUrl: repoUrl, githubToken: gitHubToken as string}, {
+                onError: (error) => {
+                    toast.error("Failed to check credits");
+                }
+            });
         }
         
         // window.alert(JSON.stringify(data,null,2))
         return true;
     }
 
-    const hasEnoughCredits = checkCredits?.data?.credits ? checkCredits.data.fileCount <= checkCredits.data.credits : true
+    const hasEnoughCredits = (checkCredits.data?.credits ?? 0) >= (checkCredits.data?.fileCount ?? 0)
 
   return (
     <div className='flex flex-col md:flex-row items-center justify-center h-full gap-10'>

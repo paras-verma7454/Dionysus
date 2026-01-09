@@ -27,23 +27,28 @@ const AskQuestionCard = () => {
   const [answer, setAnswer] = useState('')
   const saveAnswer= api.project.saveAnswer.useMutation()
   
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    setAnswer('')
-    setFilesReferences([])
-    e.preventDefault()
+  const askProject = async () => {
     if (!project?.id) return
     setLoading(true)
+    setAnswer('')
+    setFilesReferences([])
+    setOpen(true)
 
     const {output, filesRefrences} = await askQuestion(question, project.id)
-    setOpen(true)
     setFilesReferences(filesRefrences)
 
     for await (const delta of readStreamableValue(output)){
       if(delta){
         setAnswer((ans) => ans + delta)
       }
+      console.log("answer", answer)
     }
     setLoading(false)
+  }
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    askProject()
   }
   const refetch = useRefetch();
 
@@ -102,8 +107,15 @@ const AskQuestionCard = () => {
           <CardTitle>Ask a question</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={onSubmit} onKeyDown={(e) => { if (e.key === 'Enter') onSubmit(e); }}>
-            <Textarea className='h-28' placeholder='Which file should I edit to change the home page?' value={question} onChange={(e) => setQuestion(e.target.value)}/>
+          <form onSubmit={onSubmit}>
+            <Textarea className='h-28' placeholder='Which file should I edit to change the home page?' value={question} onChange={(e) => setQuestion(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault()
+                askProject()
+              }
+            }}
+            />
             <div className="h-4"></div>
             <Button type='submit' disabled={loading}>{loading ? 'Asking Dionysus...' : 'Ask Dionysus!'}</Button>
           </form>

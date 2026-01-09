@@ -16,15 +16,17 @@ type Response ={
     commitDate: string
 }
 
-export const getCommitHashes = async (githubUrl: string): Promise<Response[]> => {
+export const getCommitHashes = async (githubUrl: string, githubToken?: string): Promise<Response[]> => {
     const [owner, repo] = githubUrl.split("/").slice(-2);
     if (!owner || !repo) {
         throw new Error("Invalid github url");
     }
+    const octokit = new Octokit({
+        auth: githubToken || process.env.GITHUB_ACCESS_TOKEN,
+    });
     const {data} = await octokit.rest.repos.listCommits({
         owner,
         repo,
-
     });
     
     const sortedCommits = data.sort((a:any, b:any) => new Date(b.commit.author.date).getTime() - new Date(a.commit.author.date).getTime()) as any;
@@ -37,10 +39,25 @@ export const getCommitHashes = async (githubUrl: string): Promise<Response[]> =>
     }));
 };
 
-export const pollCommits = async (prjectId: string) => {
-    const {project, githubUrl} = await fetchProjectGithubUrl(prjectId);
-    const commitHashes = await getCommitHashes(githubUrl);
-    const unprocessedCommits = await filterUnprocessedCommits(prjectId, commitHashes);
+export const getDefaultBranch = async (githubUrl: string, githubToken?: string): Promise<string> => {
+    const [owner, repo] = githubUrl.split("/").slice(-2);
+    if (!owner || !repo) {
+        throw new Error("Invalid github url");
+    }
+    const octokit = new Octokit({
+        auth: githubToken || process.env.GITHUB_ACCESS_TOKEN,
+    });
+    const { data } = await octokit.rest.repos.get({
+        owner,
+        repo,
+    });
+    return data.default_branch;
+};
+
+export const pollCommits = async (projectId: string) => {
+    const {project, githubUrl} = await fetchProjectGithubUrl(projectId);
+    const commitHashes = await getCommitHashes(githubUrl, project.gitHubToken ?? undefined);
+    const unprocessedCommits = await filterUnprocessedCommits(projectId, commitHashes);
 
     const summaryResponse = await Promise.allSettled(unprocessedCommits.map(async (commit) => {
         return summariseCommit(githubUrl, commit.commitHash);
@@ -56,7 +73,7 @@ export const pollCommits = async (prjectId: string) => {
         data: summaries.map((summary, index) => {
             console.log(`Processing commit ${index}`);
             return {
-                projectId: prjectId,
+                projectId: projectId,
                 commitHash: unprocessedCommits[index]!.commitHash,
                 commitMessage: unprocessedCommits[index]!.commitMessage,
                 commitAuthorName: unprocessedCommits[index]!.commitAuthorName,
@@ -81,13 +98,14 @@ async function summariseCommit(githubUrl: string, commitHash: string) {
     return summary ? summary : "No summary available";
 }
 
-async function fetchProjectGithubUrl(prjectId: string) {
+async function fetchProjectGithubUrl(projectId: string) {
     const project = await db.project.findUnique({
         where: {
-            id: prjectId,
+            id: projectId,
         },
         select: {
             repoUrl: true,
+            gitHubToken: true,
         }, 
     });
     if (!project?.repoUrl) {
