@@ -69,20 +69,31 @@ export const pollCommits = async (projectId: string) => {
         }
         return "";
     });
-    const commits = await db.commit.createMany({
-        data: summaries.map((summary, index) => {
-            console.log(`Processing commit ${index}`);
-            return {
-                projectId: projectId,
-                commitHash: unprocessedCommits[index]!.commitHash,
-                commitMessage: unprocessedCommits[index]!.commitMessage,
-                commitAuthorName: unprocessedCommits[index]!.commitAuthorName,
-                commitAuthorAvatar: unprocessedCommits[index]!.commitAuthorAvatar,
-                commitDate: unprocessedCommits[index]!.commitDate,
-                summary
-            }
-        }),
-    });
+    let commits;
+    try {
+        commits = await db.commit.createMany({
+            data: summaries.map((summary, index) => {
+                console.log(`Processing commit ${index}`);
+                return {
+                    projectId: projectId,
+                    commitHash: unprocessedCommits[index]!.commitHash,
+                    commitMessage: unprocessedCommits[index]!.commitMessage,
+                    commitAuthorName: unprocessedCommits[index]!.commitAuthorName,
+                    commitAuthorAvatar: unprocessedCommits[index]!.commitAuthorAvatar,
+                    commitDate: unprocessedCommits[index]!.commitDate,
+                    summary,
+                };
+            }),
+            skipDuplicates: true,
+        });
+    } catch (err: any) {
+        if (err?.code === "P2002") {
+            console.warn("Duplicate commit(s) detected during createMany, skipped duplicates.");
+            commits = { count: 0 } as any;
+        } else {
+            throw err;
+        }
+    }
     console.log(`commits created: ${commits.count}`);
     return commits;
 

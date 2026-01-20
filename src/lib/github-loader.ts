@@ -57,11 +57,13 @@ export const indexGithubRepo = async (
   const docs = await loadGithubRepo(repoUrl, githubToken);
   const allEmbeddings = await generateEmbeddings(docs);
 
-  await Promise.allSettled(
-    allEmbeddings.map(async (embedding, index) => {
-      console.log(`processing ${index + 1} of ${allEmbeddings.length}`);
-      if (!embedding) return;
+  // Process embeddings sequentially to avoid exhausting the Prisma connection pool
+  for (let index = 0; index < allEmbeddings.length; index++) {
+    const embedding = allEmbeddings[index];
+    console.log(`processing ${index + 1} of ${allEmbeddings.length}`);
+    if (!embedding) continue;
 
+    try {
       const sourceCodeEmbedding = await db.sourceCodeEmbedding.create({
         data: {
           summary: embedding.summary,
@@ -79,8 +81,11 @@ export const indexGithubRepo = async (
         SET "summaryEmbedding" = ${vectorString}::vector
         WHERE "id" = ${sourceCodeEmbedding.id}
       `;
-    })
-  );
+    } catch (err) {
+      console.error(`failed processing embedding ${index + 1}`, err);
+      // continue processing remaining files
+    }
+  }
 };
 
 /**

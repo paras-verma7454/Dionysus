@@ -10,7 +10,8 @@ import { Document } from "@langchain/core/documents";
   
 
   export const aiSummariseCommit = async (diff: string) => {
-    const response = await model.generateContent([
+    try {
+      const response = await model.generateContent([
         `You are an expert programmer, and you are trying to summarize a git diff.
     Reminders about the git diff format:
     For every file, there are a few metadata lines, like (for example):
@@ -42,7 +43,17 @@ import { Document } from "@langchain/core/documents";
     It is given only as an example of appropriate comments.`,
     `Please summarise the following diff file: \n\n${diff}`
     ])
-    return response.response.text();
+      const text = response.response.text();
+      if (!text || !text.trim()) {
+        console.warn("aiSummariseCommit returned empty text");
+        return "No summary available";
+      }
+      console.log(`aiSummariseCommit: generated ${text.length} chars`);
+      return text;
+    } catch (err) {
+      console.error("aiSummariseCommit error:", err);
+      return "No summary available";
+    }
   }
   
 
@@ -61,10 +72,13 @@ import { Document } from "@langchain/core/documents";
           ---
           Please provide a summary of the code above in no more than 100 words.`
         ]);
-        return response.response.text();
+        const text = response.response.text();
+        if (!text || !text.trim()) return "No summary available";
+        return text;
       } catch (error) {
         // console.error("Error generating content:", error);
-        return "";
+        console.error("summariseCode error:", error);
+        return "No summary available";
       }
   }
 

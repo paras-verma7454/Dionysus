@@ -79,13 +79,17 @@ const CommitLog = () => {
                                         </p>
                                     </div>
                                     <span className='font-semibold text-foreground'>{commit.commitMessage}</span>
-                                    <div className='mt-2 whitespace-pre-wrap text-muted-foreground text-sm leading-6'
-                                        dangerouslySetInnerHTML={{
-                                            __html: commit.summary
-                                                .replace(/(\*{2})(.*?)\1/g, '<b>$2</b>')
-                                                .replace(/(['"`])(.*?)\1/g, '<b>$2</b>'),
-                                        }}
-                                    />
+                                    <div className='mt-2 whitespace-pre-wrap text-muted-foreground text-sm leading-6'>
+                                        { (commit.summary && commit.summary.trim()) ? (
+                                            <div dangerouslySetInnerHTML={{
+                                                __html: commit.summary
+                                                    .replace(/(\*{2})(.*?)\1/g, '<b>$2</b>')
+                                                    .replace(/(['"`])(.*?)\1/g, '<b>$2</b>'),
+                                            }} />
+                                        ) : (
+                                            <div className='text-sm text-gray-400'>No AI summary available</div>
+                                        ) }
+                                    </div>
                                 </div>
                             </>
                         </li>
